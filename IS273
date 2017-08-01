@@ -1,0 +1,38 @@
+#!/bin/bash
+
+echo "Enter the word that you want to search"
+read word            #store the user word in word variable
+
+echo "Enter the name of the file in which you wish to find your word"
+read file_name       #store the user file name in file_name variable
+
+count=0;             #we'll use this variable to count number of iterations in for loop through *
+
+for file in *; do 
+ 
+ file_number=`ls|wc -l`;     #this store the number of all files in the current directory as our search point
+ count=$((count+1));         #counting number of iterations
+  
+ if test "$file" = "$file_name";      #checks if the provided file is available
+  then 
+     number_of_words=`grep -o $word $file_name|wc -l`;     #store the number of matching words in number_of_words variable 
+     
+     if((number_of_words==0));      #checks if the provided word exist in a specified file
+       then 
+         echo -e "\nThere is no such word in the file \"$file_name\".\n";      #if provided word does not exists
+         
+       else 
+         echo -e "\nThe word \"$word\" has appeared $number_of_words times in the file \"$file_name\".\n";  #if it exists
+     fi; 
+     break;    # after telling the user how many words he has in his file we'll have to break and stop doing more comparisons
+     
+  else 
+     if((count==file_number || file_number==0));     # these conditions are met at the last comparison of checking whether 
+                                                     # the file exists 
+        then                                         # they are meant to confirm if the file does not exist at all
+           echo -e "\nThe file \"$file_name\" does not exist.\n";
+     fi;
+     
+ fi;
+     
+done;
